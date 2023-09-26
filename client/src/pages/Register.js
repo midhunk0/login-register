@@ -35,6 +35,7 @@ const Register = () => {
 
     return (
         <div className='register'>
+            <img src='./register.png' alt='register'/>
             <form onSubmit={registerUser}>
                 <label>Name</label>
                 <input type='text' placeholder='enter name..' value={data.name} onChange={(e) => setData({...data, name: e.target.value})}/>

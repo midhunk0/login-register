@@ -35,6 +35,7 @@ const Login = () => {
 
     return (
         <div className='login'>
+            <img src='./login.png' alt='login'/>
             <form onSubmit={loginUser}>
                 <label>Email</label>
                 <input type='email' placeholder='enter email..' value={data.email} onChange={(e) => setData({...data, email: e.target.value})}/>

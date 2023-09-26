@@ -7,11 +7,15 @@ body{
 
 nav{
     display: flex;
-    gap: 10px;
     height: 20px;
     padding: 20px;
-    justify-content: flex-end;
+    justify-content: space-between;
     background: rgb(0, 0, 0);
+}
+
+nav div{
+    display: flex;
+    gap: 10px;
 }
 
 a{
@@ -19,19 +23,19 @@ a{
     text-decoration: none;
 }
 
-.home, .dashboard{
+.home, .dashboard, .register, .login{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     height: calc(100vh - 60px);
+}
+
+.home, .dashboard{
     font-size: 50px;
 }
 
-.register, .login{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: calc(100vh - 60px);
+img{
+    width: 40%;
 }
 
 form{
@@ -45,16 +49,18 @@ form{
 input{
     border: 1px solid gray;
     outline: none;
+    padding: 10px;
+    font-family: "Work+Sans", cursive;
 }
 
 input:focus{
     border: 1px solid black;
-    outline: none;
 }
 
 button{
     background: black;
     border: none;
+    padding: 10px;
     color: white;
     cursor: pointer;
 }

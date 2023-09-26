@@ -17,12 +17,6 @@ const registerUser = async(req, res) => {
                 error: 'name is required'
             })
         };
-        //chech if password is good
-        if(!password || password.length < 6){
-            return res.json({
-                error: 'password is required and should be atleast 6 charaters'
-            })
-        };
         //check email 
         const exist = await User.findOne({email});
         if(exist){
@@ -30,8 +24,21 @@ const registerUser = async(req, res) => {
                 error: 'email is already in use'
             })
         };
-        const hashedPassword = await hashPassword(password)
+        //chech if password is good
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecialCharater = /[!@#$%^&*()_+-={}\\`~\[\];:'",.<>\/]/.test(password);
+        if(!password || password.length < 6 || !hasUpperCase || !hasNumber || !hasSpecialCharater){
+            return res.json({
+                error: 'password is required and should meet the following conditions\n'+
+                        '1. At least 6 characters long\n' +
+                        '2. Contains at least one uppercase letter\n' +
+                        '3. Contains at least one number\n' +
+                        '4. Contains at least one special character (!@#$%^&*()_+{}[]:;<>,.?~-)'
+            })
+        };
         //create user
+        const hashedPassword = await hashPassword(password)
         const user = await User.create({
             name, 
             email, 
