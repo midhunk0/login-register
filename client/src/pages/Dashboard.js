@@ -5,7 +5,7 @@ import { UserContext } from '../context/userContext';
 const Dashboard = () => {
     const { user } = useContext(UserContext);
     return (
-        <div>
+        <div className='dashboard'>
             <h1>Dashboard</h1>
             {!!user && (<h2>Hi {user.name}!</h2>)}
         </div>

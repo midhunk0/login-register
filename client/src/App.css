@@ -1,3 +1,72 @@
-*{
-    margin: 10px;
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@200&display=swap');
+
+body{
+    font-family: "Work+Sans", cursive;
+    margin: 0;
+}
+
+nav{
+    display: flex;
+    gap: 10px;
+    height: 20px;
+    padding: 20px;
+    justify-content: flex-end;
+    background: rgb(0, 0, 0);
+}
+
+a{
+    color: white;
+    text-decoration: none;
+}
+
+.home, .dashboard{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 60px);
+    font-size: 50px;
+}
+
+.register, .login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 60px);
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    padding: 20px;
+    gap: 10px;
+}
+
+input{
+    border: 1px solid gray;
+    outline: none;
+}
+
+input:focus{
+    border: 1px solid black;
+    outline: none;
+}
+
+button{
+    background: black;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.dashboard{
+    flex-direction: column;
+}
+
+h1{
+    font-size: 50px;
+}
+
+h2{
+    font-size: 30px;
 }

@@ -34,7 +34,7 @@ const Register = () => {
     }
 
     return (
-        <div>
+        <div className='register'>
             <form onSubmit={registerUser}>
                 <label>Name</label>
                 <input type='text' placeholder='enter name..' value={data.name} onChange={(e) => setData({...data, name: e.target.value})}/>
