@@ -10,7 +10,7 @@ import { Toaster } from 'react-hot-toast';
 import { UserContextProvider } from './context/userContext';
 import Dashboard from './pages/Dashboard';
 
-axios.defaults.baseURL = 'http://login-register-server.vercel.app';
+axios.defaults.baseURL = 'http://login-register-server.vercel.app/';
 axios.defaults.withCredentials = true;
 
 function App() {
