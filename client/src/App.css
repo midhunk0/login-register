@@ -35,7 +35,7 @@ a{
 }
 
 img{
-    width: 40%;
+    width: 50%;
 }
 
 form{
@@ -51,6 +51,7 @@ input{
     outline: none;
     padding: 10px;
     font-family: "Work+Sans", cursive;
+    margin-bottom: 10px;
 }
 
 input:focus{
@@ -75,4 +76,15 @@ h1{
 
 h2{
     font-size: 30px;
+}
+
+@media (max-width: 1024px){
+    .register, .login{
+        margin: 30px;
+        flex-direction: column;
+    }
+
+    img{
+        width: 80%;
+    }
 }
