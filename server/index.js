@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 
 app.use(cors({
-    origin: [""],
+    origin: ["https://login-register-frontend-phi.vercel.app/"],
     methods: ['POST', 'GET'],
     credentials: true
 }))
