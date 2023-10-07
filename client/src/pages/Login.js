@@ -7,29 +7,29 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const navigate = useNavigate();
     const [data, setData] = useState({
-        email: '',
+        identifier: '',
         password: '',
     })
 
     const loginUser = async(e) => {
         e.preventDefault()
-        const { email, password } = data;
+        const { identifier, password } = data;
         try{
             const { data } = await axios.post('/login', {
-                email,
+                identifier,
                 password
             })
             if(data.error){
                 toast.error(data.error)
             }
             else{
-                setData({})
+                setData({...data, password: ''});
                 toast.success('login successfull, welcome back')
                 navigate('/dashboard')
             }
         }
         catch(error){
-            console.log(error);
+            console.log('login failed!!',error);
         }
     }
 
@@ -37,11 +37,22 @@ const Login = () => {
         <div className='login'>
             <img src='./login.png' alt='login'/>
             <form onSubmit={loginUser}>
-                <label>Email</label>
-                <input type='email' placeholder='enter email..' value={data.email} onChange={(e) => setData({...data, email: e.target.value})}/>
+                <label>Email or Username</label>
+                <input
+                    name='identifier'
+                    placeholder={'Enter email or username'}
+                    value={data.identifier}
+                    onChange={(e) => setData({...data, identifier: e.target.value})}
+                />
                 <label>Password</label>
-                <input type='password' placeholder='enter password..' value={data.password} onChange={(e) => setData({...data, password: e.target.value})}/>
-                <button type='submit'>login</button>
+                <input
+                    type='password'
+                    name='password'
+                    placeholder='Enter password...'
+                    value={data.password}
+                    onChange={(e) => setData({...data, password: e.target.value})}
+                />
+                <button type='submit'>Login</button>
             </form>
         </div>
     )
