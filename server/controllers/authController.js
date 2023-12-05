@@ -1,11 +1,7 @@
 // @ts-nocheck
 const User = require('../models/user');
 const { hashPassword, comparePassword } = require('../helpers/auth');
-const jwt = require('jsonwebtoken');
-
-const test = (req, res) => {
-    res.json('test is working');
-}
+const jwt = require('jsonwebtoken');  // module for working with json web tokens
 
 //register endpoint
 const registerUser = async(req, res) => {
@@ -63,10 +59,10 @@ const registerUser = async(req, res) => {
 const loginUser = async(req, res) => {
     try{
         const { identifier, password } = req.body;
-        //check if user exists
+        //check if user exists based on the provided email or username
         const user = await User.findOne({
             $or: [{email: identifier}, {username: identifier}]
-        });
+        });  
         if(!user){
             return res.json({
                 error: 'no user found'
@@ -75,11 +71,11 @@ const loginUser = async(req, res) => {
         //check the password match
         const match = await comparePassword(password, user.password);
         if(match){
-            jwt.sign({email: user.email, username: user.username, id: user._id, name: user.name}, process.env.JWT_SECRET, {}, (error, token) => {
+            jwt.sign({email: user.email, username: user.username, id: user._id, name: user.name}, process.env.JWT_SECRET, {expiresIn:'1hr'}, (error, token) => {
                 if(error){
                     throw error;
                 }
-                res.cookie('token', token).json(user)
+                res.cookie('token', token).json({id: user._id, name: user.name})
             })
         }
         else{
@@ -114,60 +110,64 @@ const logoutUser = (req, res) => {
     res.json({ message: 'Logout successful' });
 }
 
-const updateProfile = async(req, res) => {
-    try{
-        const { name, username, password } = req.body;
-        const { token } = req.cookies;
-        jwt.verify(token, process.env.JWT_SECRET, {}, async(error, user) => {
-            if(error){
-                return res.json({
-                    error: 'invalid token'
-                })
-            }
-            const existingUser = await User.findById(user.id);
-            if(!existingUser){
-                return res.json({
-                    error: 'user not found'
-                })
-            }
-            const usrname = await User.findOne({username})
-            if(usrname){
-                return res.json({
-                    error: 'this username is taken'
-                })
-            };
-            const hasUpperCase = /[A-Z]/.test(password);
-            const hasNumber = /[0-9]/.test(password);
-            const hasSpecialCharater = /[!@#$%^&*()_+-={}\\`~\[\];:'",.<>\/]/.test(password);
-            if(!password || password.length < 6 || !hasUpperCase || !hasNumber || !hasSpecialCharater){
-                return res.json({
-                    error: 'password is required and should meet the following conditions\n'+
-                            '1. At least 6 characters long\n' +
-                            '2. Contains at least one uppercase letter\n' +
-                            '3. Contains at least one number\n' +
-                            '4. Contains at least one special character (!@#$%^&*()_+{}[]:;<>,.?~-)'
-                })
-            };
-            existingUser.name = name;
-            existingUser.username = username;
-            if (password) {
-                // Update password only if provided
-                const hashedPassword = await hashPassword(password);
-                existingUser.password = hashedPassword;
-            }
-            // Save the updated user
-            const updatedUser = await existingUser.save();
-            res.json(updatedUser);
-        })
-    }
-    catch(error){
-        console.log(error);
-        res.status(500).json({
-            error: 'internal server error'
-        })
-    }
-}
+// const updateProfile = async(req, res) => {
+//     try{
+//         const { name, username, password } = req.body;
+//         const { token } = req.cookies;
+//         jwt.verify(token, process.env.JWT_SECRET, {}, async(error, user) => {
+//             if(error){
+//                 return res.json({
+//                     error: 'invalid token'
+//                 })
+//             }
+//             const existingUser = await User.findById(user.id);
+//             if(!existingUser){
+//                 return res.json({
+//                     error: 'user not found'
+//                 })
+//             }
+//             const usrname = await User.findOne({username})
+//             if(usrname){
+//                 return res.json({
+//                     error: 'this username is taken'
+//                 })
+//             };
+//             const hasUpperCase = /[A-Z]/.test(password);
+//             const hasNumber = /[0-9]/.test(password);
+//             const hasSpecialCharater = /[!@#$%^&*()_+-={}\\`~\[\];:'",.<>\/]/.test(password);
+//             if(!password || password.length < 6 || !hasUpperCase || !hasNumber || !hasSpecialCharater){
+//                 return res.json({
+//                     error: 'password is required and should meet the following conditions\n'+
+//                             '1. At least 6 characters long\n' +
+//                             '2. Contains at least one uppercase letter\n' +
+//                             '3. Contains at least one number\n' +
+//                             '4. Contains at least one special character (!@#$%^&*()_+{}[]:;<>,.?~-)'
+//                 })
+//             };
+//             existingUser.name = name;
+//             existingUser.username = username;
+//             if (password) {
+//                 // Update password only if provided
+//                 const hashedPassword = await hashPassword(password);
+//                 existingUser.password = hashedPassword;
+//             }
+//             // Save the updated user
+//             const updatedUser = await existingUser.save();
+//             res.json(updatedUser);
+//         })
+//     }
+//     catch(error){
+//         console.log(error);
+//         res.status(500).json({
+//             error: 'internal server error'
+//         })
+//     }
+// }
 
 module.exports = {
-    test ,registerUser, loginUser, logoutUser, getProfile, updateProfile
+    registerUser, 
+    loginUser, 
+    getProfile, 
+    logoutUser, 
+    // updateProfile
 }

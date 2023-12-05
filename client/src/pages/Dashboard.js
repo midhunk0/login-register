@@ -13,18 +13,15 @@ const Dashboard = () => {
             await axios.post('/logout');
             localStorage.removeItem('token')
             navigate('/login')
+            window.location.reload();
         }
         catch(error){
             console.error('Logout failed:', error);
         }
     }
     if(!user){
-        navigate('/login')
+        navigate('/')
         return null;
-    }
-
-    const handleUpdate = async() =>{
-        navigate('/update')
     }
 
     return (
@@ -32,9 +29,9 @@ const Dashboard = () => {
             <img src='./dashboard.png' alt='dashboard'/>
             <div className='button-group'>
             {!!user && (<h2>Hi {user.username}!</h2>)}
-                <button onClick={handleUpdate}>Update</button>
+                {/* <button onClick={handleUpdate}>Update</button> */}
                 <button onClick={handleLogout}>Logout</button>
-                <button>Delete</button>
+                {/* <button>Delete</button> */}
             </div>
         </div>
     )

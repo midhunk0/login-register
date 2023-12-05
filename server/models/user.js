@@ -1,3 +1,4 @@
+// to create a mongoose schema and a model for user in mongodb database
 const mongoose = require('mongoose');
 const { Schema } = mongoose
 

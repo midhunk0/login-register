@@ -15,17 +15,18 @@ const Login = () => {
         e.preventDefault()
         const { identifier, password } = data;
         try{
-            const { data } = await axios.post('/login', {
+            const response = await axios.post('/login', {
                 identifier,
                 password
             })
-            if(data.error){
-                toast.error(data.error)
+            if(response.data.error){
+                toast.error(response.data.error)
             }
             else{
                 setData({...data, password: ''});
                 toast.success('login successfull, welcome back')
                 navigate('/dashboard')
+                window.location.reload();
             }
         }
         catch(error){

@@ -1,11 +1,14 @@
+/* eslint-disable no-undef */
 // @ts-nocheck
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { UserContext } from '../context/userContext';
 import { useNavigate } from 'react-router-dom';
 
 const UpdateProfile = () => {
     const navigate = useNavigate();
+    const { user, setUser } = useContext(UserContext);
     const [updatedData, setUpdatedData] = useState({
         name: '',
         username: '',
@@ -14,28 +17,16 @@ const UpdateProfile = () => {
 
     const updateProfile = async (e) => {
         e.preventDefault();
-        const { name, username, password } = updatedData;
+        try{
+            const res = await axios.put(`/update/${user.id}`, updatedData);
+            const updatedUser = res.data;
+            setUser(updatedUser);
+            toast.success('profile updated successfully');
+            navigate('/dashboard');
 
-        try {
-            const { data } = await axios.put('/update-profile', {
-                name,
-                username,
-                password
-            });
-
-            if (data.error) {
-                toast.error(data.error);
-            } else {
-                setUpdatedData({
-                    name: '',
-                    username: '',
-                    password: ''
-                });
-                toast.success('Profile updated successfully!');
-                navigate('/dashboard');
-            }
-        } catch (error) {
-            console.error('Profile update failed:', error);
+        }   
+        catch(error){
+            toast.error('error while updating profile!!');
         }
     };
 
@@ -48,21 +39,21 @@ const UpdateProfile = () => {
                     type='text'
                     placeholder='Enter name..'
                     value={updatedData.name}
-                    onChange={(e) => setUpdatedData({ ...updatedData, name: e.target.value })}
+                    onChange={(e) => setUpdatedData({...updatedData, name: e.target.value})}
                 />
                 <label>Username</label>
                 <input
                     type='text'
                     placeholder='Enter username..'
                     value={updatedData.username}
-                    onChange={(e) => setUpdatedData({ ...updatedData, username: e.target.value })}
+                    onChange={(e) => setUpdatedData({...updatedData, username: e.target.value})}
                 />
                 <label>Password</label>
                 <input
                     type='password'
                     placeholder='Enter password..'
                     value={updatedData.password}
-                    onChange={(e) => setUpdatedData({ ...updatedData, password: e.target.value })}
+                    onChange={(e) => setUpdatedData({...updatedData, password: e.target.value})}
                 />
                 <button type='submit'>Update Profile</button>
             </form>
